@@ -1,23 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://dp1h3ps4unhuf"]
+[gd_scene load_steps=6 format=3 uid="uid://dp1h3ps4unhuf"]
 
 [ext_resource type="Shader" path="res://Shaders/BurnShader.gdshader" id="1_7y8qh"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_i8jdn"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_va7b8"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5abl5"]
-noise = SubResource("FastNoiseLite_i8jdn")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jswp1"]
+noise = SubResource("FastNoiseLite_va7b8")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7vaxc"]
 shader = ExtResource("1_7y8qh")
-shader_parameter/edgeWidth = 0.05
-shader_parameter/value = 0.345
-shader_parameter/noiseTexture = SubResource("NoiseTexture2D_5abl5")
+shader_parameter/edgeWidth = 0.065
+shader_parameter/value = 0.495
+shader_parameter/burnAngle = 3.46
+shader_parameter/flameColor = Color(1, 0.4, 0, 1)
+shader_parameter/noiseTexture = SubResource("NoiseTexture2D_jswp1")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_f0b44"]
 
 [node name="Node2D" type="Node2D"]
 position = Vector2(88, 44)
 
 [node name="BurningPaper" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_7vaxc")
-position = Vector2(419, 261)
-scale = Vector2(-1.099, 1)
-texture = SubResource("NoiseTexture2D_5abl5")
+position = Vector2(322, 187)
+scale = Vector2(-217.628, 218.685)
+texture = SubResource("CanvasTexture_f0b44")
