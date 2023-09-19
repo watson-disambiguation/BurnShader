@@ -9,6 +9,8 @@ noise = SubResource("FastNoiseLite_i8jdn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7vaxc"]
 shader = ExtResource("1_7y8qh")
+shader_parameter/edgeWidth = 0.05
+shader_parameter/value = 0.345
 shader_parameter/noiseTexture = SubResource("NoiseTexture2D_5abl5")
 
 [node name="Node2D" type="Node2D"]
@@ -16,6 +18,6 @@ position = Vector2(88, 44)
 
 [node name="BurningPaper" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_7vaxc")
-position = Vector2(415, 261)
+position = Vector2(419, 261)
 scale = Vector2(-1.099, 1)
 texture = SubResource("NoiseTexture2D_5abl5")
