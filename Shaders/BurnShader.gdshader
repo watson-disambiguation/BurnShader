@@ -15,8 +15,10 @@ float inverseLerp(float from, float to, float t) {
 	return (t - from) / (to - from);
 }
 
+
+
 float clamp01(float x) {
-	return clamp(0,1,x);
+	return clamp(x,0,1);
 }
 
 void fragment() {
@@ -27,11 +29,11 @@ void fragment() {
 	
 	// progression is remapped to control the burning along edges phase and the 
 	// and the burning inward phase.
-	float burnAngle = PI*inverseLerp(0,midpointProgression,progression);
+	float burnAngle = PI*clamp01(inverseLerp(0,midpointProgression,progression));
 	float value = clamp01(inverseLerp(midpointProgression,1.0,progression));
 	// endpoint needs to be offset by edgewidth and noise strength
 	// so flame completely disappears
-	float burnIn = mix(initialSize,-outerEdgeWidth-noiseStrength,value);
+	float burnIn = clamp01(mix(initialSize,-outerEdgeWidth-noiseStrength,value));
 	
 	// signed distance fields
 	vec2 centeredUV = UV - 0.5;	
@@ -41,6 +43,7 @@ void fragment() {
 	float distFromEdge = max((abs(centeredUV.x)),abs(centeredUV.y));
 	// blended so sdf becomes more circular as burning continues
 	float dist = mix(distFromCenter,distFromEdge,(1.0-value));
+	//float dist = distFromEdge;
 
 	
 	
@@ -49,7 +52,7 @@ void fragment() {
 	if(centeredUV.x > 0.) {
 		angle = -angle;
 	}
-	angle = angle + (PI/2.0);
+	angle = angle + (PI/2.0) - falloffBurnAngle;
 	
 	// different stages of burning
 	
@@ -68,4 +71,5 @@ void fragment() {
 	float steppedAngle = 1.0-smoothstep(burnAngle-falloffBurnAngle, burnAngle,angle);
 	colour = mix(vec4(unburnedOuterEdge),colour,steppedAngle);
 	COLOR = colour;
+	//COLOR = vec4(vec3(unburnedOuterEdge),1.0);
 }
