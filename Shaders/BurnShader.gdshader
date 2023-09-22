@@ -21,19 +21,21 @@ float clamp01(float x) {
 	return clamp(x,0,1);
 }
 
-void fragment() {
+void fragment() { 
 	// noise texture moves upward, to look like rising flickering flames
 	float movingNoise = texture(noiseTexture,fract(vec2(UV.x,UV.y+TIME*flameSpeed))).x * 0.05;
 	// static noise texture for static burn edges
 	float noise = texture(noiseTexture,UV).x * noiseStrength;
 	
+	vec4 baseColour = vec4(1,1,1,0);
+	
 	// progression is remapped to control the burning along edges phase and the 
 	// and the burning inward phase.
-	float burnAngle = PI*clamp01(inverseLerp(0,midpointProgression,progression));
+	float burnAngle = mix(-falloffBurnAngle,PI+falloffBurnAngle,clamp01(inverseLerp(0,midpointProgression,progression)));
 	float value = clamp01(inverseLerp(midpointProgression,1.0,progression));
 	// endpoint needs to be offset by edgewidth and noise strength
 	// so flame completely disappears
-	float burnIn = clamp01(mix(initialSize,-outerEdgeWidth-noiseStrength,value));
+	float burnIn = mix(initialSize,-outerEdgeWidth-noiseStrength,value);
 	
 	// signed distance fields
 	vec2 centeredUV = UV - 0.5;	
@@ -52,24 +54,26 @@ void fragment() {
 	if(centeredUV.x > 0.) {
 		angle = -angle;
 	}
-	angle = angle + (PI/2.0) - falloffBurnAngle;
+	angle = angle + (PI/2.0);
 	
 	// different stages of burning
 	
 	// for use before flame has spread around the edge
 	float unburnedOuterEdge = 1.0 - step(burnIn,dist);
 	// middle flickers someone, taking from both noise textures
-	float burnedmiddleEdge = 1.0 - step(burnIn,dist-mix(movingNoise,noise,0.5));
+	float burnedmiddleEdge = 1.0 - step(burnIn,dist+mix(movingNoise,noise,0.5));
 	// outermost edge flickers a lot
-	float burnedOuterEdge = 1.0 - step(burnIn+outerEdgeWidth,dist-movingNoise);
+	float burnedOuterEdge = 1.0 - step(burnIn+outerEdgeWidth,dist+movingNoise);
 	// innermost edge is completely static
-	float burnedInnerEdge = 1.0 - step(burnIn-innerEdgeWidth,dist-noise);
+	float burnedInnerEdge = 1.0 - step(burnIn-innerEdgeWidth,dist+noise);
 	
 	vec4 colour = vec4(burnedmiddleEdge,burnedInnerEdge,burnedOuterEdge,burnedOuterEdge);
 	
 	// angle is used to divide burnt parts of the edge from unburnt parts
 	float steppedAngle = 1.0-smoothstep(burnAngle-falloffBurnAngle, burnAngle,angle);
-	colour = mix(vec4(unburnedOuterEdge),colour,steppedAngle);
+	vec4 unburnedColour = unburnedOuterEdge * baseColour + (1.0 - unburnedOuterEdge) * colour;
+	unburnedColour.a = unburnedOuterEdge;
+	colour = mix(unburnedColour,colour,steppedAngle);
 	COLOR = colour;
 	//COLOR = vec4(vec3(unburnedOuterEdge),1.0);
 }
