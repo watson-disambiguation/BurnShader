@@ -13,12 +13,12 @@ noise = SubResource("FastNoiseLite_va7b8")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7vaxc"]
 shader = ExtResource("1_7y8qh")
 shader_parameter/noiseStrength = 0.05
-shader_parameter/progression = 0.54
+shader_parameter/progression = 0.71
 shader_parameter/initialSize = 0.365
 shader_parameter/midpointProgression = 0.5
 shader_parameter/innerEdgeWidth = 0.035
 shader_parameter/outerEdgeWidth = 0.07
-shader_parameter/falloffBurnAngle = 0.0
+shader_parameter/falloffBurnAngle = 0.005
 shader_parameter/flameSpeed = 0.415
 shader_parameter/flameColor = Color(0.980392, 0.423529, 0, 1)
 shader_parameter/noiseTexture = SubResource("NoiseTexture2D_jswp1")
@@ -30,6 +30,6 @@ position = Vector2(88, 44)
 
 [node name="BurningPaper" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_7vaxc")
-position = Vector2(178.5, 182.5)
-scale = Vector2(301, 209)
+position = Vector2(178.5, 165.5)
+scale = Vector2(301, 243)
 texture = SubResource("CanvasTexture_f0b44")

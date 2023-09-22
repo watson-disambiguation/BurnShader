@@ -16,7 +16,6 @@ float inverseLerp(float from, float to, float t) {
 }
 
 
-
 float clamp01(float x) {
 	return clamp(x,0,1);
 }
@@ -47,8 +46,6 @@ void fragment() {
 	float dist = mix(distFromCenter,distFromEdge,(1.0-value));
 	//float dist = distFromEdge;
 
-	
-	
 	// calculate angle to pixel, for use in burning along the edge
 	float angle = atan(centeredUV.y/centeredUV.x);
 	if(centeredUV.x > 0.) {
@@ -70,7 +67,8 @@ void fragment() {
 	vec4 colour = vec4(burnedmiddleEdge,burnedInnerEdge,burnedOuterEdge,burnedOuterEdge);
 	
 	// angle is used to divide burnt parts of the edge from unburnt parts
-	float steppedAngle = 1.0-smoothstep(burnAngle-falloffBurnAngle, burnAngle,angle);
+	// float steppedAngle = 1.0-smoothstep(burnAngle-falloffBurnAngle, burnAngle,angle);
+	float steppedAngle = 1.0 - step(burnAngle+movingNoise,angle);
 	vec4 unburnedColour = unburnedOuterEdge * baseColour + (1.0 - unburnedOuterEdge) * colour;
 	unburnedColour.a = unburnedOuterEdge;
 	colour = mix(unburnedColour,colour,steppedAngle);
