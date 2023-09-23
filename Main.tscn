@@ -1,27 +1,24 @@
 [gd_scene load_steps=6 format=3 uid="uid://dp1h3ps4unhuf"]
 
-[ext_resource type="Shader" path="res://Shaders/BurnShader.gdshader" id="1_7y8qh"]
+[ext_resource type="Shader" path="res://Shaders/FlatBurnShader.gdshader" id="1_ayx78"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_va7b8"]
-seed = 5
-frequency = 0.0125
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y1w2q"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jswp1"]
-seamless = true
-noise = SubResource("FastNoiseLite_va7b8")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_myuxl"]
+noise = SubResource("FastNoiseLite_y1w2q")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7vaxc"]
-shader = ExtResource("1_7y8qh")
-shader_parameter/noiseStrength = 0.05
-shader_parameter/progression = 0.71
-shader_parameter/initialSize = 0.365
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xt7vv"]
+shader = ExtResource("1_ayx78")
+shader_parameter/noiseStrength = 0.07
+shader_parameter/progression = 0.305
+shader_parameter/initialSize = 0.39
 shader_parameter/midpointProgression = 0.5
-shader_parameter/innerEdgeWidth = 0.035
-shader_parameter/outerEdgeWidth = 0.07
-shader_parameter/falloffBurnAngle = 0.005
-shader_parameter/flameSpeed = 0.415
-shader_parameter/flameColor = Color(0.980392, 0.423529, 0, 1)
-shader_parameter/noiseTexture = SubResource("NoiseTexture2D_jswp1")
+shader_parameter/innerEdgeWidth = 0.07
+shader_parameter/outerEdgeWidth = 0.095
+shader_parameter/falloffBurnAngle = 6.63
+shader_parameter/flameSpeed = 0.5
+shader_parameter/flameColor = null
+shader_parameter/noiseTexture = SubResource("NoiseTexture2D_myuxl")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_f0b44"]
 
@@ -29,7 +26,7 @@ shader_parameter/noiseTexture = SubResource("NoiseTexture2D_jswp1")
 position = Vector2(88, 44)
 
 [node name="BurningPaper" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_7vaxc")
-position = Vector2(178.5, 165.5)
-scale = Vector2(301, 243)
+material = SubResource("ShaderMaterial_xt7vv")
+position = Vector2(477, 291)
+scale = Vector2(300, 479.618)
 texture = SubResource("CanvasTexture_f0b44")
